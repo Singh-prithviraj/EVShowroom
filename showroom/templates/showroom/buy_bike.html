@@ -1,0 +1,61 @@
+{% extends 'showroom/base.html' %}
+{% block content %}
+
+<section class="buy-section py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      
+      <div class="col-md-6 text-center">
+        <img src="{{ bike.image.url }}" class="img-fluid rounded" alt="{{ bike.name }}">
+        <h2 class="mt-4 text-neon">{{ bike.brand }} - {{ bike.name }}</h2>
+        <p class="lead text-light">Price: ₹{{ bike.price }}</p>
+      </div>
+
+      <div class="col-md-6">
+        <div class="buy-card p-4 rounded">
+          <h3 class="text-center text-neon mb-4">🚀 Complete Your Purchase</h3>
+          <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-neon w-100 mt-3">Buy Now</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+.buy-section {
+  background: radial-gradient(circle at top left, #0d141e, #0a0f1a);
+  color: #fff;
+}
+.text-neon {
+  color: #00ffc3;
+  text-shadow: 0 0 10px #00ffc3;
+}
+.buy-card {
+  background: rgba(15, 20, 30, 0.9);
+  border: 1px solid rgba(0, 255, 195, 0.2);
+  box-shadow: 0 0 25px rgba(0, 255, 195, 0.1);
+  transition: all 0.4s ease;
+}
+.buy-card:hover {
+  box-shadow: 0 0 40px rgba(0, 255, 195, 0.3);
+}
+.btn-neon {
+  background: #00ffc3;
+  color: #000;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: 0.3s;
+}
+.btn-neon:hover {
+  background: #00bfa0;
+  color: #fff;
+  transform: translateY(-3px);
+}
+</style>
+
+{% endblock %}

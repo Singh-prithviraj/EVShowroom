@@ -1,0 +1,162 @@
+{% extends 'showroom/base.html' %}
+{% block content %}
+{% load static %}
+
+<style>
+  /* 🌌 Professional EV Profile Dashboard */
+  body {
+    background: linear-gradient(135deg, #0b0b0b 0%, #1a1a1a 100%);
+    color: #e5e5e5;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .profile-container {
+    min-height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+  }
+
+  .profile-card {
+    background: #111;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .profile-card:hover {
+    box-shadow: 0 10px 50px rgba(0, 255, 170, 0.15);
+  }
+
+  .profile-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #00ffaa;
+    box-shadow: 0 0 15px rgba(0, 255, 170, 0.3);
+    margin-bottom: 15px;
+  }
+
+  .profile-name {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #00ffaa;
+  }
+
+  .profile-email {
+    font-size: 0.95rem;
+    color: #ccc;
+  }
+
+  .profile-info {
+    margin-top: 1.5rem;
+  }
+
+  .profile-info-item {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .profile-info-label {
+    color: #bbb;
+    font-weight: 500;
+  }
+
+  .profile-info-value {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .btn-edit {
+    background: linear-gradient(90deg, #00ffaa, #00c2ff);
+    border: none;
+    color: #000;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 10px 18px;
+    transition: 0.3s ease-in-out;
+  }
+
+  .btn-edit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(0, 255, 170, 0.3);
+  }
+
+  .logout-btn {
+    color: #ff6666;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .logout-btn:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 576px) {
+    .profile-card {
+      padding: 1.8rem;
+    }
+  }
+</style>
+
+<div class="profile-container">
+  <div class="profile-card">
+    <div class="profile-header">
+     <img 
+  src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}" 
+  alt="Profile" 
+  class="profile-avatar">
+
+      <h3 class="profile-name">{{ user.username|title }}</h3>
+      <p class="profile-email">{{ user.email }}</p>
+
+    </div>
+
+    <div class="profile-info">
+      <div class="profile-info-item">
+        <span class="profile-info-label">Full Name:</span>
+        <span class="profile-info-value">{{ user.username }} </span>
+      </div>
+      <div class="profile-info-item">
+        <span class="profile-info-label">Email:</span>
+        <span class="profile-info-value">{{ user.email }}</span>
+      </div>
+    
+      <!-- Use profile.bio -->
+      <div class="profile-info-item">
+        <span class="profile-info-label">Bio:</span>
+        <span class="profile-info-value">{{ user.profile.bio }}</span>
+      </div>
+
+
+      <div class="profile-info-item">
+        <span class="profile-info-label">Member Since:</span>
+        <span class="profile-info-value">{{ user.date_joined|date:"F j, Y" }}</span>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+      <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %} 

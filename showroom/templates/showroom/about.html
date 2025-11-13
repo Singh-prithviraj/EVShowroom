@@ -1,0 +1,76 @@
+{% extends 'showroom/base.html' %}
+{% block content %}
+<section class="about-section py-5 text-light">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0">
+        <img src="https://assets.newatlas.com/dims4/default/b6aea91/2147483647/strip/true/crop/1350x900+0+0/resize/1350x900!/format/webp/quality/90/?url=https%3A%2F%2Fnewatlas-brightspot.s3.amazonaws.com%2F08%2Ffc%2F460fe37e465abc0e21cf3aabc9fd%2F505240-2025-honda-ev-fun-concept.jpg"
+             alt="EV Bikes"
+             class="img-fluid rounded shadow-lg">
+      </div>
+      <div class="col-md-6">
+        <h2 class="fw-bold mb-3 glow-text">About EV Showroom ⚡</h2>
+        <p class="lead">
+          Welcome to <strong>EV Showroom</strong> — your one-stop destination for cutting-edge electric mobility.
+          Our mission is to bring the future of transportation to your doorstep with premium, eco-friendly bikes.
+        </p>
+        <p>
+          We believe in innovation, sustainability, and speed. Every EV bike we sell combines futuristic design,
+          smart technology, and zero emissions — because the future is electric.
+        </p>
+        <a href="{% url 'contact' %}" class="btn btn-neon mt-3">Contact Us</a>
+      </div>
+    </div>
+
+    <div class="row mt-5 text-center">
+      <h3 class="mb-4 glow-text">Why Choose Us?</h3>
+      <div class="col-md-4">
+        <div class="card bg-dark border-0 text-light shadow-lg p-4 rounded-4">
+          <h4>⚡ Eco-Friendly</h4>
+          <p>Zero emission bikes that care for our planet.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-dark border-0 text-light shadow-lg p-4 rounded-4">
+          <h4>🚴 Cutting Edge Tech</h4>
+          <p>Smart bikes designed for performance and comfort.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-dark border-0 text-light shadow-lg p-4 rounded-4">
+          <h4>🤝 Trusted Support</h4>
+          <p>Top-notch customer service with fast test ride bookings.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.about-section {
+  background: radial-gradient(circle at top right, #00ffc3 0%, #0a0f1a 80%);
+  background-attachment: fixed;
+}
+
+.glow-text {
+  color: #00ffc3;
+  text-shadow: 0 0 15px #00ffc3, 0 0 40px #00bfa0;
+}
+
+.btn-neon {
+  background: #00ffc3;
+  color: #000;
+  font-weight: 600;
+  border-radius: 50px;
+  padding: 12px 30px;
+  transition: 0.3s;
+  box-shadow: 0 0 20px #00ffc3;
+}
+
+.btn-neon:hover {
+  background: #00bfa0;
+  color: #fff;
+  transform: translateY(-3px);
+}
+</style>
+{% endblock %}

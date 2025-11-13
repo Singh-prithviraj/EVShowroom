@@ -1,0 +1,30 @@
+{% extends 'showroom/base.html' %}
+{% block content %}
+
+<div class="container mt-5" style="max-width: 600px;">
+  <h2 class="text-center mb-4 text-light">Edit Profile</h2>
+
+  <form method="POST" enctype="multipart/form-data" class="bg-dark p-4 rounded shadow">
+    {% csrf_token %}
+    <div class="mb-3 text-light">
+      <label>Username</label>
+      {{ user_form.username }}
+    </div>
+    <div class="mb-3 text-light">
+      <label>Email</label>
+      {{ user_form.email }}
+    </div>
+    <div class="mb-3 text-light">
+      <label>Bio</label>
+      {{ profile_form.bio }}
+    </div>
+    <div class="mb-3 text-light">
+      <label>Profile Picture</label><br>
+      {{ profile_form.profile_picture }}
+    </div>
+
+    <button type="submit" class="btn btn-success w-100">Save Changes</button>
+  </form>
+</div>
+
+{% endblock %}

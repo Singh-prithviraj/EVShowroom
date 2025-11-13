@@ -1,0 +1,238 @@
+{% extends 'showroom/base.html' %}
+{% load static %}
+{% block content %}
+{% load socialaccount %}
+<style>
+  body {
+    background: #0d0d0d;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+  }
+
+  .register-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .register-card {
+    background: #1a1a1a;
+    padding: 40px 35px;
+    border-radius: 20px;
+    width: 400px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+    text-align: center;
+  }
+
+  .register-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: #00c3ff;
+  }
+
+  .register-card p {
+    color: #aaa;
+    font-size: 0.9rem;
+    margin-bottom: 25px;
+  }
+
+  .form-field {
+    text-align: left;
+    margin-bottom: 18px;
+    position: relative;
+  }
+
+  .form-field label {
+    font-size: 0.9rem;
+    color: #ccc;
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .register-card input {
+    width: 100%;
+    background: #222;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 12px 45px 12px 15px;
+    border-radius: 10px;
+    outline: none;
+    font-size: 0.95rem;
+    transition: border 0.3s ease;
+  }
+
+  .register-card input:focus {
+    border-color: #00c3ff;
+  }
+
+  /* 👁 Eye icon styling */
+  .toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 38px;
+    cursor: pointer;
+    color: #777;
+    transition: color 0.2s;
+  }
+
+  .toggle-password:hover {
+    color: #00c3ff;
+  }
+
+  .btn-primary {
+    width: 100%;
+    background: #00c3ff;
+    border: none;
+    color: #000;
+    font-weight: 700;
+    padding: 12px 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background: #00a5e0;
+  }
+
+  .divider {
+    margin: 25px 0;
+    color: #777;
+    font-size: 0.85rem;
+    position: relative;
+  }
+
+  .divider::before,
+  .divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #333;
+  }
+
+  .divider::before {
+    left: 0;
+  }
+
+  .divider::after {
+    right: 0;
+  }
+
+  .btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    background: #fff;
+    color: #000;
+    border-radius: 10px;
+    padding: 12px 0;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s ease;
+  }
+
+  .btn-google:hover {
+    background: #f2f2f2;
+  }
+
+  .btn-google img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .login-text {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #aaa;
+  }
+
+  .login-text a {
+    color: #00c3ff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .login-text a:hover {
+    text-decoration: underline;
+  }
+
+  .error-message {
+    color: #ff4d4d;
+    font-size: 0.85rem;
+    margin-top: 5px;
+  }
+
+  @media (max-width: 480px) {
+    .register-card {
+      width: 90%;
+      padding: 30px 25px;
+    }
+  }
+</style>
+
+<div class="register-wrapper">
+  <div class="register-card">
+    <h2>Create Account ⚡</h2>
+    <p>Join the future of electric mobility</p>
+
+    {% if form.errors %}
+    <div class="error-message">
+      Please fix the highlighted fields below.
+    </div>
+    {% endif %}
+
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="form-field">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+
+        {% if "password" in field.name %}
+        <span class="toggle-password" onclick="togglePassword('{{ field.id_for_label }}', this)">
+          👁
+        </span>
+        {% endif %}
+
+        {% if field.errors %}
+        <div class="error-message">{{ field.errors|striptags }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+      <button type="submit" class="btn-primary">Create Account →</button>
+    </form>
+
+   
+    <div class="divider">or</div>
+    <a href="{% provider_login_url 'google' method='oauth2' %}" class="btn-google">
+      <img src="{% static 'images/hello-google.png' %}" alt=""> Sign in with Google
+    </a>
+
+    <div class="login-text">
+      Already have an account? <a href="{% url 'login' %}">Login here</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function togglePassword(id, el) {
+    const input = document.getElementById(id);
+    if (input.type === "password") {
+      input.type = "text";
+      el.textContent = "🙈";
+    } else {
+      input.type = "password";
+      el.textContent = "👁";
+    }
+  }
+</script>
+
+{% endblock %}

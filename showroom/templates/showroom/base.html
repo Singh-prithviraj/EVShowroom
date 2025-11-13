@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>⚡ EV Showroom</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <style>
+    /* 🌌 Futuristic Theme */
+    body {
+      background-color: #0a0f1a;
+      color: #e0e0e0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* ⚡ Navbar Styling */
+    .navbar {
+      background: rgba(10, 10, 20, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+      box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+    }
+
+    .navbar-brand {
+      font-weight: 600;
+      font-size: 1.5rem;
+      color: #00ffc3 !important;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px #00ffc3;
+    }
+
+    .nav-link {
+      color: #b0b0b0 !important;
+      margin-right: 15px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      left: 0;
+      bottom: -5px;
+      background: #00ffc3;
+      transition: 0.3s;
+      border-radius: 2px;
+    }
+
+    .nav-link:hover {
+      color: #00ffc3 !important;
+      text-shadow: 0 0 8px #00ffc3;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* ⚡ Footer Styling */
+    footer {
+      background: linear-gradient(180deg, rgba(10,10,20,1) 0%, rgba(5,5,10,1) 100%);
+      border-top: 1px solid rgba(0, 255, 204, 0.2);
+      padding: 30px 0;
+      color: #b0b0b0;
+    }
+
+    footer a {
+      color: #00ffc3;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    footer a:hover {
+      color: #fff;
+    }
+
+    .social-icons a {
+      font-size: 1.2rem;
+      margin: 0 10px;
+      color: #00ffc3;
+      transition: transform 0.3s, color 0.3s;
+    }
+
+    .social-icons a:hover {
+      transform: scale(1.2);
+      color: #fff;
+    }
+
+    .page-content {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+  </style>
+  <!-- Swiper JS -->
+
+</head>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<body>
+ <!-- ⚡ Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="/">⚡ Sawariya EV</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav align-items-center">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'book_test_ride' 5 %}">Book Test Ride</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'about' %}">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+        </li>
+
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'profile' %}">
+              <i class="bi bi-person-circle me-1"></i> Profile
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-danger" href="{% url 'logout' %}">
+              <i class="bi bi-box-arrow-right me-1"></i> Logout
+            </a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">
+              <i class="bi bi-box-arrow-in-right me-1"></i> Login
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'register' %}">
+              <i class="bi bi-person-plus me-1"></i> Register
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Page Content -->
+<main class="page-content">
+  {% block content %}{% endblock %}
+</main>
+
+
+
+  <!-- ⚡ Futuristic Footer -->
+  <footer class="text-center mt-5">
+    <div class="container">
+      <div class="social-icons mb-3">
+        <a href="#"><i class="bi bi-facebook"></i></a>
+        <a href="#"><i class="bi bi-instagram"></i></a>
+        <a href="#"><i class="bi bi-twitter-x"></i></a>
+        <a href="#"><i class="bi bi-linkedin"></i></a>
+      </div>
+      <p>© 2025 <strong>EV Showroom</strong> | Powered by <span style="color:#00ffc3;">Prithviraj</span></p>
+      <p style="font-size: 0.9rem;">⚡ Drive the Future. Ride Electric.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</body>
+</html>
