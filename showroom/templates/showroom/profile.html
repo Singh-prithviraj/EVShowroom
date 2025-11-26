@@ -1,162 +1,451 @@
 {% extends 'showroom/base.html' %}
-{% block content %}
 {% load static %}
+{% block content %}
+
+{% if messages %}
+<div class="django-messages">
+  {% for message in messages %}
+    <div class="msg {{ message.tags }}">
+      {{ message }}
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
 
 <style>
-  /* 🌌 Professional EV Profile Dashboard */
-  body {
-    background: linear-gradient(135deg, #0b0b0b 0%, #1a1a1a 100%);
-    color: #e5e5e5;
-    font-family: 'Poppins', sans-serif;
-  }
+/* Django Messages */
+.django-messages { margin-bottom: 20px; }
+.msg {
+  padding: 12px 18px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  animation: fadeIn 0.4s ease;
+}
+.msg.success { background: #d4ffe9; color: #00522d; }
+.msg.warning { background: #fff5cc; color: #4d3a00; }
+.msg.error { background: #ffd4d4; color: #7a0000; }
+.msg.info { background: #d9e5ff; color: #002c75; }
 
-  .profile-container {
-    min-height: 90vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 20px;
-  }
+@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
 
-  .profile-card {
-    background: #111;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 2.5rem;
-    width: 100%;
-    max-width: 600px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
-    transition: all 0.3s ease;
-  }
+/* MAIN THEME */
+body {
+  background: #0d0d0d;
+  font-family: 'Inter', sans-serif;
+  color: #ffffff;
+}
 
-  .profile-card:hover {
-    box-shadow: 0 10px 50px rgba(0, 255, 170, 0.15);
-  }
+/* Layout */
+.profile-container {
+  min-height: 90vh;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+}
 
-  .profile-header {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
+.profile-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 32px;
+}
 
-  .profile-avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #00ffaa;
-    box-shadow: 0 0 15px rgba(0, 255, 170, 0.3);
-    margin-bottom: 15px;
-  }
+/* LEFT CARD */
+.profile-card {
+  background: #111;
+  padding: 32px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+}
 
-  .profile-name {
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: #00ffaa;
-  }
+.profile-avatar {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #00ffc8;
+  margin-bottom: 10px;
+}
 
-  .profile-email {
-    font-size: 0.95rem;
-    color: #ccc;
-  }
+.profile-name {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #00ffc8;
+}
 
-  .profile-info {
-    margin-top: 1.5rem;
-  }
+.profile-email { color: #d6d6d6; font-size: 1rem; }
 
-  .profile-info-item {
-    background: #1a1a1a;
-    border: 1px solid #222;
-    border-radius: 12px;
-    padding: 15px 20px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+.meta-item {
+  background: #141414;
+  border: 1px solid #222;
+  padding: 12px 15px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
 
-  .profile-info-label {
-    color: #bbb;
+.btn-primary {
+  background: linear-gradient(90deg, #00ffc8, #00aaff);
+  border-radius: 10px;
+  padding: 8px 16px;
+  border: none;
+  color: #000;
+  font-weight: 600;
+}
+.btn-outline {
+  background: transparent;
+  color: #ff7070;
+  border: 1px solid #ff7070;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-weight: 600;
+}
+
+/* RIGHT DASHBOARD */
+.dashboard {
+  background: #0f0f0f;
+  padding: 25px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+
+.tab {
+  padding: 8px 16px;
+  background: #1a1a1a;
+  border-radius: 999px;
+  color: #d4fff2;
+  border: 1px solid #222;
+  cursor: pointer;
+}
+.tab.active { background: #00ffc8; color: #000; }
+
+.section { display: none; }
+.section.active { display: block; }
+
+.card {
+  background: #161616;
+  padding: 18px;
+  border-radius: 14px;
+  border: 1px solid #222;
+  margin-bottom: 15px;
+}
+
+/* --- FIX OVERVIEW VISIBILITY --- */
+
+/* Main overview card brighter */
+#overview .card {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px);
+}
+
+/* Text inside overview must be white & readable */
+#overview h4,
+#overview p,
+#overview .muted {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Inner stat cards */
+#overview .card .card {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+}
+
+/* Stat title (Bookings / Test Rides / Purchases) */
+#overview .card .muted {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* Stat numbers */
+#overview .card div[style*="font-size:2rem"] {
+  font-size: 2.3rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+}
+
+
+
+
+.card h4 { color: #00ffc8; margin-bottom: 8px; }
+
+/* Status Pills */
+.status-pill { padding: 6px 12px; border-radius: 999px; font-size: .8rem; font-weight: 600; }
+.status-pending { background: #fff3b0; color: #4d3a00; }
+.status-confirmed { background: #b6ffd4; color: #003e18; }
+.status-cancelled { background: #ffb7b7; color: #400000; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .profile-wrapper { grid-template-columns: 1fr; }
+}
+
+/* --- MODAL (OPTION B — GLASS STYLE) --- */
+.confirm-modal {
+  position: fixed;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.65);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+}
+
+.confirm-box {
+  background: rgba(20,20,20,0.9);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 25px;
+  width: 330px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.confirm-title {
+  font-size: 1.3rem;
+  color: #00ffc8;
+  margin-bottom: 10px;
+}
+
+.confirm-text {
+  color: #cfcfcf;
+  margin-bottom: 20px;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.btn-no {
+  flex: 1;
+  padding: 10px;
+  background: #333;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+}
+.btn-yes {
+  flex: 1;
+  padding: 10px;
+  background: #00ffc8;
+  border-radius: 8px;
+  color: #000;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#bookings .muted {
+    color: #cccccc !important;   /* Change to any color you like */
     font-weight: 500;
-  }
-
-  .profile-info-value {
-    color: #fff;
-    font-weight: 600;
-  }
-
-  .btn-edit {
-    background: linear-gradient(90deg, #00ffaa, #00c2ff);
-    border: none;
-    color: #000;
-    font-weight: 600;
-    border-radius: 10px;
-    padding: 10px 18px;
-    transition: 0.3s ease-in-out;
-  }
-
-  .btn-edit:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(0, 255, 170, 0.3);
-  }
-
-  .logout-btn {
-    color: #ff6666;
-    text-decoration: none;
+}
+#purchases .muted {
+    color: #cccccc !important;   /* Change to any color you like */
     font-weight: 500;
-  }
+}
+#testRides .muted {
+    color: #cccccc !important;   /* Change to any color you like */
+    font-weight: 500;
+}
 
-  .logout-btn:hover {
-    text-decoration: underline;
-  }
-
-  @media (max-width: 576px) {
-    .profile-card {
-      padding: 1.8rem;
-    }
-  }
 </style>
 
-<div class="profile-container">
-  <div class="profile-card">
-    <div class="profile-header">
-     <img 
-  src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}" 
-  alt="Profile" 
-  class="profile-avatar">
 
-      <h3 class="profile-name">{{ user.username|title }}</h3>
-      <p class="profile-email">{{ user.email }}</p>
+<!-- CONFIRMATION MODAL -->
+<div id="confirmModal" class="confirm-modal">
+  <div class="confirm-box">
+    <div class="confirm-title">Are you sure?</div>
+    <div id="modalMessage" class="confirm-text"></div>
 
-    </div>
-
-    <div class="profile-info">
-      <div class="profile-info-item">
-        <span class="profile-info-label">Full Name:</span>
-        <span class="profile-info-value">{{ user.username }} </span>
-      </div>
-      <div class="profile-info-item">
-        <span class="profile-info-label">Email:</span>
-        <span class="profile-info-value">{{ user.email }}</span>
-      </div>
-    
-      <!-- Use profile.bio -->
-      <div class="profile-info-item">
-        <span class="profile-info-label">Bio:</span>
-        <span class="profile-info-value">{{ user.profile.bio }}</span>
-      </div>
-
-
-      <div class="profile-info-item">
-        <span class="profile-info-label">Member Since:</span>
-        <span class="profile-info-value">{{ user.date_joined|date:"F j, Y" }}</span>
-      </div>
-    </div>
-
-    <div class="text-center mt-4">
-      <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary btn-sm">Edit Profile</a>
-      <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+    <div class="confirm-actions">
+      <div class="btn-no" onclick="closeConfirmModal()">No</div>
+      <a id="modalConfirmBtn" class="btn-yes">Yes</a>
     </div>
   </div>
 </div>
 
-{% endblock %} 
+
+<div class="profile-container">
+  <div class="profile-wrapper">
+
+    <!-- LEFT SIDE -->
+    <div class="profile-card">
+
+      <div style="text-align:center;">
+        <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}"
+             class="profile-avatar">
+
+        <div class="profile-name">{{ request.user.get_full_name|default:request.user.username|title }}</div>
+        <div class="profile-email">{{ request.user.email }}</div>
+      </div>
+
+      <div class="profile-meta-box">
+        <div class="meta-item"><span>Joined</span><span>{{ request.user.date_joined|date:"F j, Y" }}</span></div>
+        <div class="meta-item"><span>Bookings</span><span>{{ bookings.count }}</span></div>
+        <div class="meta-item"><span>Test Rides</span><span>{{ test_rides.count }}</span></div>
+        <div class="meta-item"><span>Purchases</span><span>{{ bike_purchases.count }}</span></div>
+      </div>
+
+      <div class="action-row">
+        <a href="{% url 'edit_profile' %}" class="btn-primary">Edit Profile</a>
+        <a href="{% url 'logout' %}" class="btn-outline">Logout</a>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE DASHBOARD -->
+    <div class="dashboard">
+
+      <div class="tabs">
+        <div class="tab active" data-target="overview">Overview</div>
+        <div class="tab" data-target="bookings">Bookings</div>
+        <div class="tab" data-target="testRides">Test Rides</div>
+        <div class="tab" data-target="purchases">Purchases</div>
+      </div>
+
+      <!-- OVERVIEW -->
+      <div id="overview" class="section active">
+        <div class="card">
+          <h4>Welcome back, {{ request.user.first_name|default:request.user.username|title }} 👋</h4>
+          <p class="muted">Here's a quick look at your activity.</p>
+
+          <div style="display:flex; gap:15px; flex-wrap:wrap; margin-top:15px;">
+            <div class="card" style="flex:1; text-align:center;">
+              <div class="muted">Bookings</div>
+              <div style="font-size:2rem; font-weight:700;">{{ bookings.count }}</div>
+            </div>
+
+            <div class="card" style="flex:1; text-align:center;">
+              <div class="muted">Test Rides</div>
+              <div style="font-size:2rem; font-weight:700;">{{ test_rides.count }}</div>
+            </div>
+
+            <div class="card" style="flex:1; text-align:center;">
+              <div class="muted">Purchases</div>
+              <div style="font-size:2rem; font-weight:700;">{{ bike_purchases.count }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOOKINGS -->
+      <div id="bookings" class="section">
+        {% if bookings.exists %}
+          {% for b in bookings %}
+            <div class="card">
+              <h4>{{ b.bike.brand }} - {{ b.bike.name }}</h4>
+              <p class="muted">Booked on: {{ b.created_at|date:"M d, Y H:i" }}</p>
+
+              <div class="status-pill
+                {% if b.status == 'pending' %}status-pending
+                {% elif b.status == 'confirmed' %}status-confirmed
+                {% else %}status-cancelled
+                {% endif %}">
+                {{ b.status|title }}
+              </div>
+
+              <div style="margin-top:10px;">
+                <a href="{% url 'view_booking' b.id %}" class="muted">View</a> •
+                <a href="javascript:void(0)" class="muted"
+                   onclick="openConfirmModal('Cancel this booking?', '{% url 'cancel_booking' b.id %}')">
+                   Cancel
+                </a>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="muted">You don’t have any bookings.</p>
+        {% endif %}
+      </div>
+
+      <!-- TEST RIDES -->
+      <div id="testRides" class="section">
+        {% if test_rides.exists %}
+          {% for t in test_rides %}
+            <div class="card">
+              <h4>{{ t.bike.brand }} - {{ t.bike.name }}</h4>
+              <p class="muted">Requested on: {{ t.created_at|date:"M d, Y H:i" }}</p>
+              <p class="muted">{{ t.phone }}</p>
+
+              <a href="{% url 'view_test_ride' t.id %}" class="muted">View</a> •
+              <a href="javascript:void(0)" class="muted"
+                 onclick="openConfirmModal('Cancel this test ride?', '{% url 'cancel_test_ride' t.id %}')">
+                 Cancel
+              </a>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="muted">No test ride requests yet.</p>
+        {% endif %}
+      </div>
+
+      <!-- PURCHASES -->
+      <div id="purchases" class="section">
+        {% if bike_purchases.exists %}
+          {% for p in bike_purchases %}
+            <div class="card">
+              <h4>{{ p.bike.brand }} - {{ p.bike.name }}</h4>
+              <p class="muted">Ordered on: {{ p.date|date:"M d, Y H:i" }}</p>
+              <p class="muted">{{ p.color }} • {{ p.variant }}</p>
+
+              <a href="{% url 'view_purchase' p.id %}" class="muted">View</a> •
+              <a href="{% url 'invoice_download' p.id %}" class="muted">Invoice</a> •
+              <a href="javascript:void(0)" class="muted"
+                 onclick="openConfirmModal('Delete this purchase?', '{% url 'delete_purchase' p.id %}')">
+                 Delete
+              </a>
+            </div>
+          {% endfor %}
+        {% else %}
+          <p class="muted">No purchases found.</p>
+        {% endif %}
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- JS for Tabs + Modal -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  /* --- TAB SWITCHING --- */
+  const tabs = document.querySelectorAll(".tab");
+  const sections = document.querySelectorAll(".section");
+
+  tabs.forEach(tab => {
+    tab.onclick = function () {
+      tabs.forEach(t => t.classList.remove("active"));
+      this.classList.add("active");
+
+      sections.forEach(sec => sec.classList.remove("active"));
+      document.getElementById(this.dataset.target).classList.add("active");
+    };
+  });
+
+  /* --- CONFIRM MODAL --- */
+  window.openConfirmModal = function (msg, link) {
+    document.getElementById("modalMessage").innerText = msg;
+    document.getElementById("modalConfirmBtn").href = link;
+    document.getElementById("confirmModal").style.display = "flex";
+  };
+
+  window.closeConfirmModal = function () {
+    document.getElementById("confirmModal").style.display = "none";
+  };
+
+});
+</script>
+
+{% endblock %}

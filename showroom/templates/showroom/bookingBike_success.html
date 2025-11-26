@@ -1,0 +1,19 @@
+{% extends 'showroom/base.html' %}
+{% block content %}
+
+<div class="container text-center mt-5">
+    <h2>Booking Successful!</h2>
+    <p>Thank you, {{ booking.customer_name }}.</p>
+
+    <h4>Your Booking Reference:</h4>
+    <h3>#{{ booking.id }}</h3>
+
+    <p>Bike: <strong>{{ booking.bike.name }}</strong></p>
+    <p>Date: <strong>{{ booking.preferred_date }}</strong></p>
+    <p>Time: <strong>{{ booking.preferred_time }}</strong></p>
+    <p>Status: <strong>{{ booking.status }}</strong></p>
+
+    <a href="/" class="btn btn-success mt-3">Back to Home</a>
+</div>
+
+{% endblock %}

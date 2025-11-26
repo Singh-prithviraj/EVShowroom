@@ -1,50 +1,47 @@
 from django import forms
-from .models import TestRideBooking
-from .models import ContactMessage
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
+from .models import (
+    TestRideBooking,
+    ContactMessage,
+    BikePurchase,
+    Profile,
+    Booking
+)
 
-
-
+# -----------------------------
+#  Test Ride Booking Form
+# -----------------------------
 class TestRideBookingForm(forms.ModelForm):
     class Meta:
         model = TestRideBooking
         fields = ['customer_name', 'email', 'phone', 'preferred_date', 'message']
         widgets = {
-            'preferred_date': forms.DateInput(attrs={'type': 'date'}),
-            'message': forms.Textarea(attrs={'rows': 3}),
+            'customer_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'preferred_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'message': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
 
-
-
-
+# -----------------------------
+#  Contact Form
+# -----------------------------
 class ContactForm(forms.ModelForm):
     class Meta:
         model = ContactMessage
         fields = ['name', 'email', 'subject', 'message']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Name'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Your Email'}),
-            'subject': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Subject'}),
-            'message': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Your Message'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'subject': forms.TextInput(attrs={'class': 'form-control'}),
+            'message': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
         }
 
-#booking
-from .models import BikeBooking
-
-class BikeBookingForm(forms.ModelForm):
-    class Meta:
-        model = BikeBooking
-        fields = ['name', 'email', 'phone', 'bike_model', 'booking_date', 'message']
-        widgets = {
-            'booking_date': forms.DateInput(attrs={'type': 'date'}),
-            'message': forms.Textarea(attrs={'rows': 3}),
-        }
-
-
-from .models import BikePurchase
-
+# -----------------------------
+#  Bike Purchase Form
+# -----------------------------
 class BikePurchaseForm(forms.ModelForm):
     class Meta:
         model = BikePurchase
@@ -53,17 +50,12 @@ class BikePurchaseForm(forms.ModelForm):
             'address': forms.Textarea(attrs={'rows': 3}),
         }
 
-
-
-from django import forms
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-from .models import Profile
-
-
-# ✅ User Registration Form
+# -----------------------------
+#  User Registration Form
+# -----------------------------
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'class': 'form-control'}))
+
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
@@ -75,9 +67,9 @@ class UserRegisterForm(UserCreationForm):
             user.save()
         return user
 
-
-
-# ✅ Profile Update Form (includes bio + picture)
+# -----------------------------
+#  Profile Update Form
+# -----------------------------
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
@@ -86,8 +78,9 @@ class ProfileUpdateForm(forms.ModelForm):
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
 
-
-# ✅ User Info Update Form (for username/email)
+# -----------------------------
+#  User Update Form
+# -----------------------------
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
@@ -95,4 +88,33 @@ class UserUpdateForm(forms.ModelForm):
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
+
+# -----------------------------
+#  Bike Booking Form (NEW)
+# -----------------------------
+class BikeBookingForm(forms.ModelForm):
+    # This is NOT part of the model
+    pincode = forms.CharField(
+        max_length=6,
+        required=False,
+        label="Pincode"
+    )
+
+    class Meta:
+        model = Booking
+        fields = [
+            'customer_name',
+            'email',
+            'phone',
+            'address',
+            'city',
+            'state',
+            'booking_type',
+            'preferred_date',
+            'preferred_time'
+        ]
+        widgets = {
+            'preferred_date': forms.DateInput(attrs={'type': 'date'}),
+            'preferred_time': forms.TimeInput(attrs={'type': 'time'}),
         }

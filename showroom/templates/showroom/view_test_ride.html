@@ -1,0 +1,41 @@
+{% extends 'showroom/base.html' %}
+{% block content %}
+
+<div class="container py-4">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4">
+
+            <h2 class="fw-bold text-primary mb-4">Test Ride Details</h2>
+
+            <div class="mb-3">
+                <h5 class="fw-semibold">Bike:</h5>
+                <p>{{ test_ride.bike.brand }} - {{ test_ride.bike.name }}</p>
+            </div>
+
+            <div class="mb-3">
+                <h5 class="fw-semibold">Preferred Date:</h5>
+                <p>{{ test_ride.preferred_date }}</p>
+            </div>
+
+            <div class="mb-3">
+                <h5 class="fw-semibold">Phone Number:</h5>
+                <p>{{ test_ride.phone }}</p>
+            </div>
+
+            <div class="mt-4 d-flex gap-3">
+                <a href="{% url 'cancel_test_ride' test_ride.id %}"
+                   class="btn btn-danger px-4"
+                   onclick="return confirm('Are you sure you want to cancel this test ride?');">
+                    Cancel Test Ride
+                </a>
+
+                <a href="{% url 'profile' %}" class="btn btn-primary px-4">
+                    ← Back to Dashboard
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

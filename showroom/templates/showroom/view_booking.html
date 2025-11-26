@@ -1,0 +1,38 @@
+{% extends 'showroom/base.html' %}
+{% block content %}
+
+<div class="container py-4">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4">
+
+            <h2 class="mb-4 fw-bold text-primary">Booking Details</h2>
+
+            <div class="mb-3">
+                <h5 class="fw-semibold">Bike:</h5>
+                <p>{{ booking.bike.brand }} - {{ booking.bike.name }}</p>
+            </div>
+
+            <div class="mb-3">
+                <h5 class="fw-semibold">Status:</h5>
+                <span class="badge bg-success px-3 py-2">{{ booking.status }}</span>
+            </div>
+
+            <div class="mb-3">
+                <h5 class="fw-semibold">Booked On:</h5>
+                <p>{{ booking.created_at|date:"M d, Y" }}</p>
+            </div>
+
+            <div class="mb-3">
+                <h5 class="fw-semibold">Preferred Schedule:</h5>
+                <p>{{ booking.preferred_date }} • {{ booking.preferred_time }}</p>
+            </div>
+
+            <a href="{% url 'profile' %}" class="btn btn-primary mt-3 px-4">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

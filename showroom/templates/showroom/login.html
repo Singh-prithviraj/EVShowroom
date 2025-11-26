@@ -2,6 +2,7 @@
 {% load static %}
 {% load socialaccount %}
 {% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
 <style>
   body {
@@ -143,6 +144,34 @@
       padding: 30px 25px;
     }
   }
+
+  .password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 40%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 15px;
+  color: #777;
+  transition: color 0.2s ease;
+}
+
+
+
+  .toggle-password:hover {
+    color: #00c3ff;
+  }
+
+
 </style>
 
 <div class="login-wrapper">
@@ -153,8 +182,17 @@
 
     <form method="POST" action="{% url 'login' %}">
       {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.GET.next }}">
+  
+
       <input type="text" name="identifier" placeholder="Email or username" required>
-      <input type="password" name="password" placeholder="Password" required>
+      
+
+      <div class="password-wrapper">
+        <input id="password" type="password" name="password" placeholder="Password" required>
+        <i class="bi bi-eye toggle-password" onclick="togglePassword('password', this)"></i>
+      </div>
+
       <button type="submit" class="btn-primary">Continue →</button>
     </form>
 
@@ -169,5 +207,21 @@
     </div>
   </div>
 </div>
+
+<script>
+function togglePassword(id, el) {
+  const input = document.getElementById(id);
+
+  if (input.type === "password") {
+    input.type = "text";
+    el.classList.remove("bi-eye");
+    el.classList.add("bi-eye-slash");
+  } else {
+    input.type = "password";
+    el.classList.remove("bi-eye-slash");
+    el.classList.add("bi-eye");
+  }
+}
+</script>
 
 {% endblock %}

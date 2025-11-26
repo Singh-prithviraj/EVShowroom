@@ -1,12 +1,175 @@
 {% extends 'showroom/base.html' %}
+{% load static %}
 {% block content %}
 
-<h2 class="text-center mb-4">Book a Test Ride for {{ bike.name }}</h2>
+<style>
+    :root {
+        --ev-green: #27ae60;
+        --ev-green-dark: #1f8a4c;
+        --ev-gray: #6f6f6f;
+    }
 
-<form method="POST" class="card p-4 shadow-sm">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn btn-primary w-100 mt-3">Submit Booking</button>
-</form>
+    /* Titles */
+    h2 {
+        color: var(--ev-green-dark);
+        font-weight: 700;
+    }
+
+    /* Text */
+    p.text-description {
+        color: var(--ev-gray);
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    /* Form Card */
+    .card {
+        border-radius: 18px;
+        border: none;
+        background: #fff;
+        box-shadow: 0 8px 35px rgba(0, 0, 0, 0.07);
+    }
+
+    /* Form Inputs */
+    input, select {
+        border-radius: 12px !important;
+        border: 1px solid #d1d7dc !important;
+        background: #f7fcf9;
+        padding: 12px;
+        font-size: 15px;
+        transition: 0.2s ease;
+    }
+
+    input:focus, select:focus {
+        border-color: var(--ev-green);
+        box-shadow: 0 0 6px rgba(39,174,96,0.4);
+        background: #fff;
+    }
+
+    /* Label */
+    .form-label {
+        font-weight: 600;
+        color: #444;
+        font-size: 14px;
+    }
+
+    /* Button */
+    .btn-ev {
+        background: linear-gradient(90deg, var(--ev-green), var(--ev-green-dark));
+        border-radius: 14px;
+        border: none;
+        color: white;
+        font-size: 16px;
+        padding: 14px;
+        transition: 0.3s ease;
+    }
+
+    .btn-ev:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 22px rgba(39,174,96,0.4);
+    }
+
+    /* Bike Image */
+    .bike-image {
+        border-radius: 18px;
+        box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+        width: 100%;
+    }
+
+    /* Progress */
+    .progress {
+        height: 10px;
+        background: #e9f7ef;
+        border-radius: 50px;
+    }
+
+    .progress-bar {
+        background: linear-gradient(90deg, var(--ev-green), var(--ev-green-dark));
+        border-radius: 50px;
+    }
+
+    /* --- MOBILE RESPONSIVE FIXES --- */
+    @media (max-width: 768px) {
+        .container {
+            margin-top: 20px !important;
+        }
+
+        h2 {
+            font-size: 22px;
+        }
+
+        p.text-description {
+            font-size: 14px;
+        }
+
+        .card-body {
+            padding: 22px !important;
+        }
+
+        .btn-ev {
+            font-size: 15px;
+            padding: 12px;
+        }
+
+        .bike-image {
+            margin-top: 25px;
+            width: 90%;
+            border-radius: 14px;
+        }
+    }
+</style>
+
+<div class="container my-5">
+
+    <!-- Progress -->
+    <div class="progress mb-4">
+        <div class="progress-bar" style="width: 100%;"></div>
+    </div>
+
+    <div class="row align-items-center justify-content-between">
+
+        <!-- Left: Form -->
+        <div class="col-md-6">
+            <h2>Book a Test Ride</h2>
+
+            <p class="text-description">
+                You’re booking a test ride for  
+                <strong style="color: var(--ev-green-dark);">
+                    {{ bike.brand }} {{ bike.name }}
+                </strong>.
+                Submit your details and our EV expert team will contact you shortly.
+            </p>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                            </div>
+                        {% endfor %}
+
+                        <button type="submit" class="btn btn-ev w-100 fw-semibold">
+                            ⚡ Book Test Ride
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Bike Image -->
+        <div class="col-md-5 text-center">
+            {% if bike.image %}
+                <img src="{{ bike.image.url }}" class="bike-image" alt="{{ bike.name }}">
+            {% else %}
+                <img src="{% static 'images/bike-placeholder.png' %}" class="bike-image" alt="Bike">
+            {% endif %}
+        </div>
+
+    </div>
+</div>
 
 {% endblock %}

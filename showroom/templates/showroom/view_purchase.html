@@ -1,0 +1,48 @@
+{% extends 'showroom/base.html' %}
+{% block content %}
+
+<div class="container py-4">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4">
+
+            <h2 class="fw-bold text-primary mb-4">Purchase Details</h2>
+
+            <ul class="list-group list-group-flush">
+
+                <li class="list-group-item py-3">
+                    <strong>Bike:</strong> {{ purchase.bike.brand }} - {{ purchase.bike.name }}
+                </li>
+
+                <li class="list-group-item py-3">
+                    <strong>Variant:</strong> {{ purchase.variant }}
+                </li>
+
+                <li class="list-group-item py-3">
+                    <strong>Color:</strong> {{ purchase.color }}
+                </li>
+
+                <li class="list-group-item py-3">
+                    <strong>Payment Mode:</strong> {{ purchase.payment_mode }}
+                </li>
+
+                <li class="list-group-item py-3">
+                    <strong>Date:</strong> {{ purchase.date|date:"M d, Y" }}
+                </li>
+
+            </ul>
+
+            <div class="mt-4 d-flex gap-3">
+                <a href="{% url 'invoice_download' purchase.id %}" class="btn btn-success px-4">
+                    Download Invoice
+                </a>
+
+                <a href="{% url 'profile' %}" class="btn btn-primary px-4">
+                    ← Back to Dashboard
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

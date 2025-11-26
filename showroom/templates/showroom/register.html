@@ -68,19 +68,7 @@
     border-color: #00c3ff;
   }
 
-  /* 👁 Eye icon styling */
-  .toggle-password {
-    position: absolute;
-    right: 12px;
-    top: 38px;
-    cursor: pointer;
-    color: #777;
-    transition: color 0.2s;
-  }
-
-  .toggle-password:hover {
-    color: #00c3ff;
-  }
+  
 
   .btn-primary {
     width: 100%;
@@ -175,6 +163,35 @@
       padding: 30px 25px;
     }
   }
+
+
+  {% comment %} eye hide icon {% endcomment %}
+
+   .password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 70%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 15px;
+  color: #777;
+  transition: color 0.2s ease;
+}
+
+
+  .toggle-password:hover {
+    color: #00c3ff;
+  }
+
 </style>
 
 <div class="register-wrapper">
@@ -195,11 +212,10 @@
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
         {{ field }}
 
-        {% if "password" in field.name %}
-        <span class="toggle-password" onclick="togglePassword('{{ field.id_for_label }}', this)">
-          👁
-        </span>
-        {% endif %}
+      {% if "password" in field.name %}
+      <i class="bi bi-eye toggle-password" onclick="togglePassword('{{ field.id_for_label }}', this)"></i>
+      {% endif %}
+
 
         {% if field.errors %}
         <div class="error-message">{{ field.errors|striptags }}</div>
@@ -223,16 +239,20 @@
 </div>
 
 <script>
-  function togglePassword(id, el) {
-    const input = document.getElementById(id);
-    if (input.type === "password") {
-      input.type = "text";
-      el.textContent = "🙈";
-    } else {
-      input.type = "password";
-      el.textContent = "👁";
-    }
+function togglePassword(id, el) {
+  const input = document.getElementById(id);
+
+  if (input.type === "password") {
+    input.type = "text";
+    el.classList.remove("bi-eye");
+    el.classList.add("bi-eye-slash");
+  } else {
+    input.type = "password";
+    el.classList.remove("bi-eye-slash");
+    el.classList.add("bi-eye");
   }
+}
 </script>
+
 
 {% endblock %}

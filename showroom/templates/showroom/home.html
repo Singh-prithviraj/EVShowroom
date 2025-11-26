@@ -153,7 +153,7 @@
 
             <div class="bike-buttons mt-3">
               <a href="{% url 'bike_detail' bike.id %}" class="btn btn-explore">Explore</a>
-              <a href="{% url 'buy_bike' bike.id %}" class="btn btn-buy">Book Now</a>
+              <a href="{% url 'book_bike' bike.id %}" class="btn btn-buy">Book Now</a>
             </div>
           </div>
         </div>
@@ -363,7 +363,7 @@
         Experience the power of electric mobility — smooth, silent, and sustainable.  
         Get <span class="offer-highlight">₹5000 OFF</span> on your first booking.
       </p>
-      <a href="book_test_ride" class="offer-btn">Book Now</a>
+      <a href="{% url 'book_bike' 5 %}" class="offer-btn">Book Now</a>
     </div>
   </div>
 </section>
