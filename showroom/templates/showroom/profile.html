@@ -257,6 +257,138 @@ body {
     font-weight: 500;
 }
 
+/* ============================================================
+   FINAL MOBILE RESPONSIVE FIXES (FULLY CLEAN & OPTIMIZED)
+   ============================================================ */
+
+/* 🔥 Tablet + Mobile (<= 768px) */
+@media (max-width: 768px) {
+
+  /* Main container */
+  .profile-container {
+    padding: 20px 10px !important;
+  }
+
+  /* Left & right stack vertically */
+  .profile-wrapper {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  /* Profile card */
+  .profile-card {
+    padding: 22px !important;
+    text-align: center !important;
+  }
+
+  .profile-avatar {
+    width: 95px !important;
+    height: 95px !important;
+  }
+
+  .profile-name {
+    font-size: 1.25rem !important;
+  }
+
+  .meta-item {
+    padding: 10px 12px !important;
+    font-size: 0.95rem !important;
+  }
+
+  /* Dashboard wrapper */
+  .dashboard {
+    padding: 18px !important;
+  }
+
+  /* Tabs → scrollable row */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 6px;
+  }
+
+  .tab {
+    font-size: 0.9rem !important;
+    padding: 6px 12px !important;
+  }
+
+  /* Cards shrink */
+  .card {
+    padding: 14px !important;
+  }
+
+  /* Stats number smaller */
+  #overview .card div[style*="font-size:2rem"] {
+    font-size: 1.8rem !important;
+  }
+
+  /* Stat cards stack in 1 per row */
+  #overview > .card > div {
+    flex-direction: column !important;
+  }
+
+  #overview > .card > div > .card {
+    width: 100% !important;
+  }
+
+  /* Modal scaling */
+  .confirm-modal {
+    align-items: flex-end;
+    padding: 0 10px 20px;
+  }
+
+  .confirm-box {
+    width: 100% !important;
+    max-width: 420px;
+    padding: 20px !important;
+  }
+
+  .confirm-actions {
+    flex-direction: column !important;
+  }
+
+  .btn-no,
+  .btn-yes {
+    width: 100% !important;
+  }
+}
+
+/* 🔥 Extra Small (<= 480px) */
+@media (max-width: 480px) {
+
+  .profile-container {
+    padding: 15px 5px !important;
+  }
+
+  .profile-card {
+    padding: 18px !important;
+  }
+
+  .dashboard {
+    padding: 12px !important;
+  }
+
+  .tab {
+    font-size: 0.8rem !important;
+    padding: 5px 10px !important;
+  }
+
+  .card h4 {
+    font-size: 1rem !important;
+  }
+
+  .muted {
+    font-size: 0.9rem !important;
+  }
+
+  #overview .card div[style*="font-size:2rem"] {
+    font-size: 1.6rem !important;
+  }
+}
+
+
 </style>
 
 
@@ -286,6 +418,7 @@ body {
 
         <div class="profile-name">{{ request.user.get_full_name|default:request.user.username|title }}</div>
         <div class="profile-email">{{ request.user.email }}</div>
+       
       </div>
 
       <div class="profile-meta-box">

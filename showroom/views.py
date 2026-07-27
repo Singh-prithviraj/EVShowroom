@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
+from django.db.models import Q
 
 from .models import Bike, Profile, Booking
 from .forms import (
@@ -24,7 +25,57 @@ User = get_user_model()
 # ------------------ Home ------------------
 def home(request):
     bikes = Bike.objects.all()
-    return render(request, 'showroom/home.html', {'bikes': bikes})
+
+    # ---- Search & Filter params ----
+    query = request.GET.get('q', '').strip()
+    brand = request.GET.get('brand', '').strip()
+    min_price = request.GET.get('min_price', '').strip()
+    max_price = request.GET.get('max_price', '').strip()
+    min_range = request.GET.get('min_range', '').strip()
+    sort = request.GET.get('sort', '').strip()
+
+    # Search by bike name or brand
+    if query:
+        bikes = bikes.filter(Q(name__icontains=query) | Q(brand__icontains=query))
+
+    # Filter by exact brand
+    if brand:
+        bikes = bikes.filter(brand=brand)
+
+    # Filter by price range (guard against bad input)
+    if min_price.isdigit():
+        bikes = bikes.filter(price__gte=min_price)
+    if max_price.isdigit():
+        bikes = bikes.filter(price__lte=max_price)
+
+    # Filter by minimum range (km)
+    if min_range.isdigit():
+        bikes = bikes.filter(range_km__gte=min_range)
+
+    # Sorting
+    sort_options = {
+        'price_asc': 'price',
+        'price_desc': '-price',
+        'range_desc': '-range_km',
+        'speed_desc': '-top_speed',
+    }
+    if sort in sort_options:
+        bikes = bikes.order_by(sort_options[sort])
+
+    # Distinct brand list for the filter dropdown
+    brands = Bike.objects.values_list('brand', flat=True).distinct().order_by('brand')
+
+    context = {
+        'bikes': bikes,
+        'brands': brands,
+        'query': query,
+        'selected_brand': brand,
+        'min_price': min_price,
+        'max_price': max_price,
+        'min_range': min_range,
+        'sort': sort,
+    }
+    return render(request, 'showroom/home.html', context)
 
 
 def bike_detail(request, bike_id):

@@ -114,7 +114,7 @@ html, body {
  <!-- ⚡ Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
   <div class="container">
-    <a class="navbar-brand fw-bold" href="/">⚡ Sawariya EV</a>
+    <a class="navbar-brand fw-bold" href="/">⚡BikeBuddy EV </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
@@ -126,7 +126,7 @@ html, body {
           <a class="nav-link" href="/">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'book_test_ride' 6 %}">Book Test Ride</a>
+          <a class="nav-link" href="{% url 'book_test_ride' 11 %}">Book Test Ride</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'about' %}">About</a>
@@ -134,6 +134,78 @@ html, body {
         <li class="nav-item">
           <a class="nav-link" href="{% url 'contact' %}">Contact</a>
         </li>
+        <li class="nav-item">
+
+
+
+
+
+
+
+
+<script>
+
+function toggleChat(){
+
+    let chat =
+        document.getElementById("chat-container");
+
+    if(chat.style.display === "flex"){
+
+        chat.style.display = "none";
+    }
+    else{
+
+        chat.style.display = "flex";
+    }
+}
+
+
+function sendMessage() {
+
+    let input =
+        document.getElementById("user-input");
+
+    let message = input.value;
+
+    if(message.trim() === ""){
+        return;
+    }
+
+    let chatBox =
+        document.getElementById("chat-box");
+
+    chatBox.innerHTML +=
+        `<p><b>You:</b> ${message}</p>`;
+
+
+    fetch(`/chatbot/get-response/?message=${message}`)
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        chatBox.innerHTML +=
+            `<p><b>Bot:</b> ${data.response}</p>`;
+
+        input.value = "";
+
+        chatBox.scrollTop =
+            chatBox.scrollHeight;
+    })
+
+    .catch(error => {
+
+        console.log(error);
+
+        chatBox.innerHTML +=
+            `<p style="color:red;">
+             Error connecting chatbot
+             </p>`;
+    });
+}
+
+</script>
 
         {% if user.is_authenticated %}
           <li class="nav-item">
@@ -161,6 +233,9 @@ html, body {
       </ul>
     </div>
   </div>
+  
+
+</li>
 </nav>
 
 
@@ -179,18 +254,28 @@ html, body {
 
       <!-- Brand Info -->
       <div class="col-md-4 mb-4">
-        <h3 class="footer-brand">⚡ EV Showroom</h3>
+        <h3 class="footer-brand">⚡BikeBuddy EV </h3>
         <p class="footer-text">
           Experience the future of mobility with our powerful and efficient electric vehicles.
           Test rides, bookings, and expert support — all in one place.
         </p>
 
         <div class="social-icons mt-3">
-          <a href="#"><i class="bi bi-facebook"></i></a>
-          <a href="#"><i class="bi bi-instagram"></i></a>
-          <a href="#"><i class="bi bi-twitter-x"></i></a>
-          <a href="#"><i class="bi bi-youtube"></i></a>
-          <a href="#"><i class="bi bi-linkedin"></i></a>
+        
+          <a href="https://www.instagram.com/its_prithvi_banna_/?igsh=cTRuanY1cm5oMTk%3D&utm_source=ig_contact_invite#" target="_blank">
+            <i class="bi bi-instagram"></i>
+          </a>
+        
+          <a href="https://github.com/Singh-prithviraj " target="_blank">
+            <i class="bi bi-github"></i>
+          </a>
+
+          <a href="https://linkedin.com/in/prithviraj-singh-chouhan-b415a2319/" target="_blank">
+           <i class="bi bi-linkedin"></i>
+         </a>
+
+
+
         </div>
       </div>
 
@@ -231,7 +316,7 @@ html, body {
 
     <div class="text-center mt-3">
       <p class="footer-bottom mb-0">
-        © 2025 <strong>EV Showroom</strong> | Crafted with ⚡ by <span style="color:#00ffc3;">Prithviraj</span>
+        © 2026 <strong>BikeBuddy EV </strong> | Crafted with ⚡ by <span style="color:#00ffc3;">Prithviraj</span>
       </p>
     </div>
   </div>

@@ -1,59 +1,357 @@
 {% extends 'showroom/base.html' %}
 {% block content %}
 
-<div class="card shadow-lg my-4 bike-card position-relative" style="transition: transform 0.3s;">
-  {% if bike.available %}
-    <span class="badge bg-success position-absolute top-0 end-0 m-3 p-2">Available</span>
-  {% else %}
-    <span class="badge bg-secondary position-absolute top-0 end-0 m-3 p-2">Unavailable</span>
-  {% endif %}
+<div class="container py-4">
 
-  <img src="{{ bike.image.url }}" class="card-img-top" alt="{{ bike.name }}">
-  <div class="card-body">
-    <h2 class="card-title">{{ bike.brand }} - {{ bike.name }}</h2>
-    <p><strong>Price:</strong> ₹{{ bike.price }}</p>
-    <p><strong>Range:</strong> {{ bike.range_km }} km</p>
-    <p><strong>Battery:</strong> {{ bike.battery_capacity }}</p>
-    <p><strong>Top Speed:</strong> {{ bike.top_speed }} km/h</p>
-    <p>{{ bike.description }}</p>
+  <!-- Main Card -->
+  <div class="bike-card">
 
-    {% if bike.available %}
-      <div class="d-grid gap-2 mt-3">
-        {% if user.is_authenticated %}
-          <a href="{% url 'book_test_ride' bike.id %}" class="btn btn-success btn-lg">
-            Book Test Ride
-          </a>
-          <a href="{% url 'buy_bike' bike.id %}" class="btn btn-primary btn-lg">
-            Buy Bike
-          </a>
-        {% else %}
-          <a href="{% url 'login' %}?next={% url 'book_test_ride' bike.id %}" class="btn btn-success btn-lg">
-            Book Test Ride
-          </a>
-          <a href="{% url 'login' %}?next={% url 'buy_bike' bike.id %}" class="btn btn-primary btn-lg">
-            Buy Bike
-          </a>
-        {% endif %}
+    <!-- Header -->
+    <div class="bike-header">
+
+      <!-- Image Section -->
+      <div class="bike-image-wrapper">
+        <img src="{{ bike.image.url }}" alt="{{ bike.name }}" class="bike-image">
       </div>
-    {% else %}
-      <button class="btn btn-secondary w-100 mt-3" disabled>
-        Currently Unavailable
-      </button>
-    {% endif %}
+
+      <!-- Info Section -->
+      <div class="bike-details-wrapper">
+
+        <h1 class="bike-title">{{ bike.brand }} <span>{{ bike.name }}</span></h1>
+
+        <div class="bike-status">
+          {% if bike.available %}
+            <span class="badge-available">Available</span>
+          {% else %}
+            <span class="badge-unavailable">Unavailable</span>
+          {% endif %}
+        </div>
+
+        <p class="bike-price">₹{{ bike.price }} <small>On-road price</small></p>
+
+        <div class="spec-highlights">
+
+          <div class="highlight-box">
+            <h4>{{ bike.range_km }} km</h4>
+            <p>Range</p>
+          </div>
+
+          <div class="highlight-box">
+            <h4>{{ bike.top_speed }} km/h</h4>
+            <p>Top Speed</p>
+          </div>
+
+          <div class="highlight-box">
+            <h4>{{ bike.battery_capacity }}</h4>
+            <p>Battery</p>
+          </div>
+
+        </div>
+
+        <div class="action-buttons">
+          {% if bike.available %}
+            {% if user.is_authenticated %}
+              <a href="{% url 'book_test_ride' bike.id %}" class="btn-action btn-test">Book Test Ride</a>
+              <a href="{% url 'buy_bike' bike.id %}" class="btn-action btn-buy">Buy Now</a>
+            {% else %}
+              <a href="{% url 'login' %}?next={% url 'book_test_ride' bike.id %}" class="btn-action btn-test">Book Test Ride</a>
+              <a href="{% url 'login' %}?next={% url 'buy_bike' bike.id %}" class="btn-action btn-buy">Buy Now</a>
+            {% endif %}
+          {% else %}
+            <button class="btn-action btn-disabled" disabled>Unavailable</button>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Description Section -->
+    <div class="desc-section">
+      <h3>About the Bike</h3>
+      <p>{{ bike.description }}</p>
+    </div>
+
+    <!-- Specifications Section -->
+    <div class="spec-container">
+      <h3>Specifications</h3>
+
+      <div class="spec-grid">
+        <div class="spec-item">
+          <label>Brand</label>
+          <p>{{ bike.brand }}</p>
+        </div>
+        <div class="spec-item">
+          <label>Model</label>
+          <p>{{ bike.name }}</p>
+        </div>
+        <div class="spec-item">
+          <label>Range</label>
+          <p>{{ bike.range_km }} km</p>
+        </div>
+        <div class="spec-item">
+          <label>Top Speed</label>
+          <p>{{ bike.top_speed }} km/h</p>
+        </div>
+        <div class="spec-item">
+          <label>Battery Capacity</label>
+          <p>{{ bike.battery_capacity }}</p>
+        </div>
+        <div class="spec-item">
+          <label>Status</label>
+          <p>{{ bike.available|yesno:"Available,Unavailable" }}</p>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
-<!-- Optional inline CSS for hover effect -->
+
+<!-- CSS -->
 <style>
-  .bike-card:hover {
-    transform: scale(1.03);
+
+/* Global */
+body {
+  background: #f4f6f9;
+  font-family: "Inter", sans-serif;
+}
+
+.bike-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+/* Header Layout */
+.bike-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+/* Image */
+.bike-image-wrapper {
+  flex: 1;
+  min-width: 280px;
+}
+.bike-image {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  max-height: 320px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+/* Info Column */
+.bike-details-wrapper {
+  flex: 1;
+  min-width: 260px;
+}
+
+.bike-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+.bike-title span {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Status Badge */
+.badge-available, .badge-unavailable {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.badge-available { background: #dcfce7; color: #15803d; }
+.badge-unavailable { background: #fde2e2; color: #b91c1c; }
+
+/* Price */
+.bike-price {
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-top: 15px;
+  color: #111827;
+}
+.bike-price small {
+  display: block;
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: -3px;
+}
+
+/* Highlight Boxes */
+.spec-highlights {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.highlight-box {
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 15px 20px;
+  width: 140px;
+  text-align: center;
+}
+.highlight-box h4 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #111827;
+}
+.highlight-box p {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* Action Buttons */
+.action-buttons {
+  margin-top: 25px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+.btn-action {
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-align: center;
+  flex: 1;
+  text-decoration: none;
+  color: white;
+  transition: 0.2s;
+}
+.btn-test { background: #16a34a; }
+.btn-test:hover { background: #15803d; }
+
+.btn-buy { background: #2563eb; }
+.btn-buy:hover { background: #1e40af; }
+
+.btn-disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  color: #fff;
+}
+
+/* Description */
+.desc-section {
+  margin-top: 40px;
+}
+.desc-section h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #1f2937;
+}
+.desc-section p {
+  color: #374151;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Specifications */
+.spec-container {
+  margin-top: 40px;
+}
+.spec-container h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #1f2937;
+}
+
+.spec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+}
+
+.spec-item {
+  background: #f9fafb;
+  padding: 14px;
+  border-radius: 10px;
+}
+.spec-item label {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+.spec-item p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 4px;
+}
+
+/* ------------------------ */
+/*   🔥 MOBILE RESPONSIVE   */
+/* ------------------------ */
+
+@media (max-width: 992px) {
+  .bike-title {
+    font-size: 1.7rem;
   }
-  .card-title {
-    font-weight: 700;
+}
+
+@media (max-width: 768px) {
+
+  .bike-card {
+    padding: 18px;
   }
-  .card-body p {
-    margin-bottom: 0.5rem;
+
+  .bike-header {
+    gap: 20px;
   }
+
+  .bike-title {
+    font-size: 1.5rem;
+  }
+
+  .bike-image {
+    max-height: 260px;
+  }
+
+  .highlight-box {
+    width: 48%;  /* 2 boxes per row */
+  }
+
+  .action-buttons a,
+  .action-buttons button {
+    width: 100%;
+    flex: none;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .bike-card {
+    padding: 15px;
+  }
+
+  .bike-title {
+    font-size: 1.35rem;
+  }
+
+  .bike-price {
+    font-size: 1.5rem;
+  }
+
+  .highlight-box {
+    width: 100%; /* Single column on very small screens */
+  }
+
+  .spec-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bike-image {
+    max-height: 220px;
+  }
+}
+
 </style>
 
 {% endblock %}

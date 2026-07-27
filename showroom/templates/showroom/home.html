@@ -132,6 +132,170 @@
 
 
 
+<!-- 🔍 Search & Filter Bar -->
+<section id="filters" class="filter-section ">
+  <div class="container-fluid ">
+    <form method="get" action="{% url 'home' %}#bikes" class="filter-form">
+
+      <div class="filter-field filter-search">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search by name or brand..." class="filter-input">
+      </div>
+
+      <div class="filter-field">
+        <select name="brand" class="filter-input">
+          <option value="">All Brands</option>
+          {% for b in brands %}
+          <option value="{{ b }}" {% if b == selected_brand %}selected{% endif %}>{{ b }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+    
+      <div class="filter-field">
+        <input type="number" name="min_range" value="{{ min_range }}" placeholder="Min Range (km)" class="filter-input" min="0">
+      </div>
+
+    
+
+      <div class="filter-field filter-actions">
+        <button type="submit" class="btn-filter-apply">Apply</button>
+        <a href="{% url 'home' %}#bikes" class="btn-filter-clear">Clear</a>
+      </div>
+
+    </form>
+  </div>
+</section>
+
+<style>
+  .filter-section {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 20px 15px;
+}
+
+.filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-field {
+  flex: 1 1 180px;
+  min-width: 180px;
+}
+
+.filter-search {
+  flex: 2 1 280px;
+  min-width: 250px;
+}
+
+.filter-input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1.5px solid #d0d7e2;
+  font-size: 15px;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+  background: #fff;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-filter-apply,
+.btn-filter-clear {
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-filter-apply {
+  background: linear-gradient(90deg, #00ffd5, #007bff);
+  border: none;
+  color: #000;
+}
+
+.btn-filter-apply:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.btn-filter-clear {
+  background: transparent;
+  border: 1.5px solid #999;
+  color: #555;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-filter-clear:hover {
+  border-color: #000;
+  color: #000;
+}
+
+/* Tablet & Mobile */
+@media (max-width:768px){
+
+    .filter-section{
+        padding:12px 10px;
+    }
+
+    .filter-form{
+        display:flex;
+        flex-direction:column;
+        gap:8px;          /* Small gap */
+        align-items:stretch;
+    }
+
+    .filter-field,
+    .filter-search{
+        flex:none;
+        width:100%;
+        min-width:unset;
+        max-width:100%;
+        margin:0;
+    }
+
+    .filter-input{
+        padding:10px 12px;
+        font-size:14px;
+    }
+
+    .filter-actions{
+        display:flex;
+        flex-direction:column;
+        width:100%;
+        gap:8px;
+        margin-top:4px;
+    }
+
+    .btn-filter-apply,
+    .btn-filter-clear{
+        width:100%;
+        padding:10px;
+    }
+
+}
+</style>
+
 <!-- 🚴 Premium Bike Listing Section -->
 <section id="bikes" class="bike-section py-5">
   <div class="container-fluid px-4">
@@ -158,12 +322,24 @@
           </div>
         </div>
         {% empty %}
-        <p class="text-center text-muted">No bikes available at the moment.</p>
+        <p class="text-center text-muted">
+          {% if query or selected_brand or min_price or max_price or min_range %}
+            No bikes match your search/filters. Try adjusting them or
+            <a href="{% url 'home' %}#bikes">clear all filters</a>.
+          {% else %}
+            No bikes available at the moment.
+          {% endif %}
+        </p>
         {% endfor %}
       </div>
     </div>
   </div>
 </section>
+
+
+
+
+
 
 <!-- 🔹 Inline CSS -->
 <style>
@@ -320,6 +496,377 @@
   }
 </style>
 
+
+
+<!-- 🚀 Ultra-Modern EV Bike Comparison Section -->
+<section class="compare-section py-5">
+  <div class="container-fluid px-4">
+    <h2 class="compare-title text-center mb-5">Compare All EV Models</h2>
+
+    <div class="compare-table-wrapper">
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Features</th>
+            {% for bike in bikes %}
+            <th class="model-title">{{ bike.brand }} {{ bike.name }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Top Speed</td>
+            {% for bike in bikes %}
+            <td>{{ bike.top_speed }} km/h</td>
+            {% endfor %}
+          </tr>
+
+          <tr>
+            <td>Range</td>
+            {% for bike in bikes %}
+            <td>{{ bike.range_km }} km</td>
+            {% endfor %}
+          </tr>
+
+          {% comment %} <tr>
+            <td>Charging Time</td>
+            {% for bike in bikes %}
+            <td>{{ bike.charging_time }} hrs</td>
+            {% endfor %}
+          </tr> {% endcomment %}
+
+          <tr>
+            <td>Battery Capacity</td>
+            {% for bike in bikes %}
+            <td>{{ bike.battery_capacity }} </td>
+            {% endfor %}
+          </tr>
+
+          <tr>
+            <td>Price</td>
+            {% for bike in bikes %}
+            <td>₹{{ bike.price }}</td>
+            {% endfor %}
+          </tr>
+
+          <tr>
+            <td></td>
+            {% for bike in bikes %}
+            <td>
+              <a href="{% url 'bike_detail' bike.id %}" class="cmp-btn">View</a>
+            </td>
+            {% endfor %}
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</section>
+
+
+<style>
+  /* 🌐 Ultra-Modern Comparison Section */
+.compare-section {
+  background: #f4f7fb;
+}
+
+.compare-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #222;
+}
+
+/* 🧊 Table Container (Glass Smooth) */
+.compare-table-wrapper {
+  overflow-x: auto;
+  padding: 20px;
+}
+
+.compare-table {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 18px;
+  border-collapse: collapse;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* 🔹 Heading Row */
+.compare-table thead {
+  background: #eef2f7;
+}
+
+.compare-table th {
+  padding: 18px 15px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #333;
+}
+
+/* 🧩 Table Data */
+.compare-table td {
+  padding: 16px 12px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #444;
+  border-bottom: 1px solid #e5e8ec;
+}
+
+/* 🖥 Highlight Feature Column */
+.compare-table tbody tr td:first-child {
+  font-weight: 600;
+  color: #000;
+  background: #f9fbfc;
+  text-align: left;
+  width: 180px;
+}
+
+/* 🌟 Row Hover Highlight */
+.compare-table tbody tr:hover {
+  background: #f3faff;
+}
+
+/* 🎯 Buttons */
+.cmp-btn {
+  padding: 6px 18px;
+  border-radius: 25px;
+  background: #007bff;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: 0.3s;
+}
+
+.cmp-btn:hover {
+  background: #0056b3;
+  transform: scale(1.07);
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .compare-table td,
+  .compare-table th {
+    font-size: 0.85rem;
+    padding: 12px 6px;
+  }
+
+  .compare-table tbody tr td:first-child {
+    width: 130px;
+  }
+}
+
+</style>
+
+
+<!-- ⚡ Compare Models Section -->
+<section class="compare-section py-5">
+  <div class="container">
+
+    <h2 class="compare-title text-center mb-5">
+      Compare EV Models
+    </h2>
+
+    <!-- Select Boxes -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-4">
+        <select id="bikeA" class="form-select compare-select">
+          <option value="">Select First Model</option>
+          {% for bike in bikes %}
+            <option value="{{ bike.id }}">
+              {{ bike.brand }} — {{ bike.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-4">
+        <select id="bikeB" class="form-select compare-select">
+          <option value="">Select Second Model</option>
+          {% for bike in bikes %}
+            <option value="{{ bike.id }}">
+              {{ bike.brand }} — {{ bike.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <!-- Comparison Output -->
+    <div id="compareResult" class="compare-box d-none">
+
+      <div class="row">
+
+        <!-- Bike A -->
+        <div class="col-md-6">
+          <div class="compare-card">
+            <img id="imgA" class="compare-img" />
+            <h3 id="nameA" class="compare-bike-name"></h3>
+            <p id="brandA" class="compare-text"></p>
+            <p id="priceA" class="compare-price"></p>
+
+                <!-- New Fields -->
+            <p id="speedA" class="compare-text"></p>
+            <p id="rangeA" class="compare-text"></p>
+            <p id="batteryA" class="compare-text"></p>
+            
+          </div>
+        </div>
+
+        <!-- Bike B -->
+        <div class="col-md-6">
+          <div class="compare-card">
+            <img id="imgB" class="compare-img" />
+            <h3 id="nameB" class="compare-bike-name"></h3>
+            <p id="brandB" class="compare-text"></p>
+            <p id="priceB" class="compare-price"></p>
+
+                <!-- New Fields -->
+            <p id="speedB" class="compare-text"></p>
+            <p id="rangeB" class="compare-text"></p>
+            <p id="batteryB" class="compare-text"></p>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<style>
+.compare-section {
+  background: #f4f7fb;
+  padding: 80px 0;
+}
+
+.compare-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.compare-select {
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid #d0d7e2;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.compare-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0,123,255,0.3);
+}
+
+.compare-box {
+  margin-top: 40px;
+}
+
+.compare-card {
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 28px;
+  text-align: center;
+  border: 1px solid #e1e6ee;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  transition: 0.4s ease;
+}
+
+.compare-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+}
+
+.compare-img {
+  height: 180px;
+  width: auto;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+.compare-bike-name {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #007bff;
+}
+
+.compare-text {
+  font-size: 1rem;
+  color: #555;
+}
+
+.compare-price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #28a745;
+}
+</style>
+
+
+<script>
+  const bikes = {
+    {% for b in bikes %}
+    "{{ b.id }}": {
+      name: "{{ b.name }}",
+      brand: "{{ b.brand }}",
+      price: "{{ b.price }}",
+      image: "{{ b.image.url }}",
+      speed: "{{ b.top_speed }}",
+      range: "{{ b.range_km }}",
+      battery: "{{ b.battery_capacity }}"
+    },
+    {% endfor %}
+  };
+
+  function updateComparison() {
+    const idA = document.getElementById("bikeA").value;
+    const idB = document.getElementById("bikeB").value;
+
+    if (!idA || !idB) return;
+
+    const a = bikes[idA];
+    const b = bikes[idB];
+
+    document.getElementById("compareResult").classList.remove("d-none");
+
+    document.getElementById("imgA").src = a.image;
+    document.getElementById("nameA").textContent = a.name;
+    document.getElementById("brandA").textContent = a.brand;
+    document.getElementById("priceA").textContent = "₹" + a.price;
+    document.getElementById("speedA").textContent = "Top Speed: " + a.speed + " km/h";
+    document.getElementById("rangeA").textContent = "Range: " + a.range + " km";
+    document.getElementById("batteryA").textContent = "Battery: " + a.battery;
+
+    document.getElementById("imgB").src = b.image;
+    document.getElementById("nameB").textContent = b.name;
+    document.getElementById("brandB").textContent = b.brand;
+    document.getElementById("priceB").textContent = "₹" + b.price;
+    document.getElementById("speedB").textContent = "Top Speed: " + b.speed + " km/h";
+    document.getElementById("rangeB").textContent = "Range: " + b.range + " km";
+    document.getElementById("batteryB").textContent = "Battery: " + b.battery;
+
+
+  }
+
+  document.getElementById("bikeA").onchange = updateComparison;
+  document.getElementById("bikeB").onchange = updateComparison;
+</script>
+
+
+
+
+
+
+
+
 <!-- 🔹 Smooth drag scrolling -->
 <script>
   const slider = document.querySelector('.bike-slider');
@@ -358,12 +905,12 @@
 <section class="ev-offer-section">
   <div class="offer-container">
     <div class="offer-content">
-      <h2 class="offer-title">⚡ Book Your Test Ride Today!</h2>
+      <h2 class="offer-title">⚡ Book Your Bike Today!</h2>
       <p class="offer-text">
         Experience the power of electric mobility — smooth, silent, and sustainable.  
         Get <span class="offer-highlight">₹5000 OFF</span> on your first booking.
       </p>
-      <a href="{% url 'book_bike' 5 %}" class="offer-btn">Book Now</a>
+      <a href="{% url 'book_bike' 11 %}" class="offer-btn">Book Now</a>
     </div>
   </div>
 </section>

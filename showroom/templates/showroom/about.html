@@ -1,76 +1,122 @@
 {% extends 'showroom/base.html' %}
 {% block content %}
+
+
+
 <section class="about-section py-5 text-light">
   <div class="container">
-    <div class="row align-items-center">
-      <div class="col-md-6 mb-4 mb-md-0">
+
+    <!-- Row 1: Image + Text -->
+    <div class="row align-items-center flex-column-reverse flex-md-row">
+      
+      <!-- Text Section -->
+      <div class="col-md-6 mt-4 mt-md-0">
+        <h2 class="fw-bold mb-3 about-title">About BikeBuddy EV  ⚡</h2>
+
+        <p class="lead">
+          Welcome to <strong>EV Showroom</strong> — your destination for next-generation electric mobility.
+          We bring premium, eco-friendly EV bikes built with innovation and sustainability in mind.
+        </p>
+
+        <p>
+          Every EV we offer blends futuristic design with smart technology and zero emissions — 
+          because the future of transportation is electric.
+        </p>
+
+        <a href="{% url 'contact' %}" class="btn btn-primary mt-3 px-4 py-2">
+          Contact Us
+        </a>
+      </div>
+
+      <!-- Image Section -->
+      <div class="col-md-6 mb-4 mb-md-0 text-center">
         <img src="https://assets.newatlas.com/dims4/default/b6aea91/2147483647/strip/true/crop/1350x900+0+0/resize/1350x900!/format/webp/quality/90/?url=https%3A%2F%2Fnewatlas-brightspot.s3.amazonaws.com%2F08%2Ffc%2F460fe37e465abc0e21cf3aabc9fd%2F505240-2025-honda-ev-fun-concept.jpg"
              alt="EV Bikes"
-             class="img-fluid rounded shadow-lg">
+             class="img-fluid rounded shadow">
       </div>
-      <div class="col-md-6">
-        <h2 class="fw-bold mb-3 glow-text">About EV Showroom ⚡</h2>
-        <p class="lead">
-          Welcome to <strong>EV Showroom</strong> — your one-stop destination for cutting-edge electric mobility.
-          Our mission is to bring the future of transportation to your doorstep with premium, eco-friendly bikes.
-        </p>
-        <p>
-          We believe in innovation, sustainability, and speed. Every EV bike we sell combines futuristic design,
-          smart technology, and zero emissions — because the future is electric.
-        </p>
-        <a href="{% url 'contact' %}" class="btn btn-neon mt-3">Contact Us</a>
+
+    </div>
+
+    <!-- Why Choose Us -->
+    <div class="row mt-5 text-center">
+      <h3 class="mb-4 about-title">Why Choose Us?</h3>
+
+      <div class="col-md-4 mb-4">
+        <div class="card feature-card text-light p-4 h-100">
+          <h4>⚡ Eco-Friendly</h4>
+          <p>Zero-emission bikes that protect our environment.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card feature-card text-light p-4 h-100">
+          <h4>🚴 Advanced Technology</h4>
+          <p>High-performance EVs designed for smart mobility.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card feature-card text-light p-4 h-100">
+          <h4>🤝 Trusted Support</h4>
+          <p>Reliable service with quick test-ride availability.</p>
+        </div>
       </div>
     </div>
 
-    <div class="row mt-5 text-center">
-      <h3 class="mb-4 glow-text">Why Choose Us?</h3>
-      <div class="col-md-4">
-        <div class="card bg-dark border-0 text-light shadow-lg p-4 rounded-4">
-          <h4>⚡ Eco-Friendly</h4>
-          <p>Zero emission bikes that care for our planet.</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card bg-dark border-0 text-light shadow-lg p-4 rounded-4">
-          <h4>🚴 Cutting Edge Tech</h4>
-          <p>Smart bikes designed for performance and comfort.</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card bg-dark border-0 text-light shadow-lg p-4 rounded-4">
-          <h4>🤝 Trusted Support</h4>
-          <p>Top-notch customer service with fast test ride bookings.</p>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
 <style>
+/* Premium Dark Background */
 .about-section {
-  background: radial-gradient(circle at top right, #00ffc3 0%, #0a0f1a 80%);
-  background-attachment: fixed;
+  background: linear-gradient(135deg, #0f141a, #06080d);
 }
 
-.glow-text {
-  color: #00ffc3;
-  text-shadow: 0 0 15px #00ffc3, 0 0 40px #00bfa0;
+/* Professional Title Highlight */
+.about-title {
+  color: #00e6b8;
+  font-weight: 700;
 }
 
-.btn-neon {
-  background: #00ffc3;
+/* Cards */
+.feature-card {
+  background: #151a20;
+  border: 1px solid rgba(0, 255, 200, 0.15);
+  border-radius: 15px;
+  transition: 0.3s ease;
+}
+.feature-card:hover {
+  transform: translateY(-5px);
+  background: #1b2028;
+}
+
+/* Button */
+.btn-primary {
+  background: #00e6b8;
+  border: none;
   color: #000;
   font-weight: 600;
   border-radius: 50px;
-  padding: 12px 30px;
-  transition: 0.3s;
-  box-shadow: 0 0 20px #00ffc3;
+  transition: 0.3s ease;
 }
-
-.btn-neon:hover {
+.btn-primary:hover {
   background: #00bfa0;
   color: #fff;
-  transform: translateY(-3px);
+}
+
+/* Mobile Improvements */
+@media (max-width: 767px) {
+  .about-title {
+    font-size: 1.6rem;
+    text-align: center;
+  }
+  p {
+    font-size: 0.95rem;
+  }
+  .feature-card {
+    padding: 20px;
+  }
 }
 </style>
+
 {% endblock %}
